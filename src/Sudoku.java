@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 /**
  * The Sudoku solver.
  *
@@ -28,20 +30,55 @@ public class Sudoku {
     /** Returns an array of the eight Locations in the same row as here. */
     static Location[] findRow(Location here) {
         // TODO You have to write this
+        Location[] temp = new Location[8];
+        int i = 0;
+        for (int j = 0; j < 9; j++) {
+            if (j != here.column) {
+                temp[i] = createLocation(here.row, j);
+                i++;
+            }
+        }
 
-        return null;
+        return temp;
     }
 
     /** Returns an array of the eight Locations in the same column as here. */
     static Location[] findColumn(Location here) {
         // TODO You have to write this
-        return null;
+        Location[] temp = new Location[8];
+        int i = 0;
+        for (int j = 0; j < 9; j++) {
+            if (j != here.row) {
+                temp[i] = createLocation(j, here.column);
+                i++;
+            }
+        }
+
+        return temp;
     }
 
     /** Returns an array of the eight Locations in the same 3x3 block as here. */
     static Location[] findBlock(Location here) {
         // TODO You have to write this
-        return null;
+        Location[] temp = new Location[8];
+        int index = 0;
+
+        int r = here.row - here.row % 3;
+        int c = here.column - here.column % 3;
+
+        for (int i = r; i < r + 3; i++) {
+            for (int j = c; j < c + 3; j++) {
+                if (i == here.row && j == here.column) {
+                    continue;
+                } else {
+                    Location t = new Location();
+                    t.row = i;
+                    t.column = j;
+                    temp[index++] = t;
+                }
+            }
+        }
+        return temp;
     }
 
     /**
@@ -50,13 +87,36 @@ public class Sudoku {
      */
     static Square[][] createSquares() {
         // TODO You have to write this
-        return null;
+        Square[][] grid = new Square[9][9];
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                Square n = new Square();
+                n.value = 0;
+                grid[i][j] = n;
+            }
+        }
+        resetSquares(grid);
+        return grid;
     }
 
     /** Returns a String representing grid, showing the numbers (or . for squares with value 0). */
     static String toString(Square[][] grid) {
         // TODO You have to write this
-        return null;
+        StringBuilder temp = new StringBuilder();
+        for (int i = 0; i < 9; i++) {
+            StringBuilder row = new StringBuilder();
+            for (int j = 0; j < 9; j++) {
+                if (grid[i][j].value == 0) {
+                    row.append(".");
+                } else {
+                    row.append(grid[i][j].value);
+                }
+            }
+            row.append("\n");
+            temp.append(row);
+        }
+
+        return temp.toString();
     }
 
     /**
@@ -66,7 +126,26 @@ public class Sudoku {
      */
     static Square[][] createSquares(String diagram) {
         // TODO You have to write this
-        return null;
+        Square[][] grid = new Square[9][9];
+        int i = 0, j = 0, index = 0;
+        while (index < diagram.length()) {
+            if (diagram.charAt(index) == '\n') {
+                j = 0;
+                i++;
+            } else {
+                Square n = new Square();
+                if (diagram.charAt(index) == '.') {
+                    n.value = 0;
+                } else {
+                    n.value = Character.getNumericValue(diagram.charAt(index));
+                }
+                grid[i][j++] = n;
+            }
+            index++;
+        }
+
+        resetSquares(grid);
+        return grid;
     }
 
     /**
@@ -75,7 +154,36 @@ public class Sudoku {
      */
     static boolean[] findValidNumbers(Square s) {
         // TODO You have to write this
-        return null;
+        boolean[] re = new boolean[10];
+        Arrays.fill(re, true);
+
+        for (int i = 0; i < re.length; i++) {
+            // TODO In row
+            for (Square t : s.row) {
+                if (i == t.value) {
+                    re[i] = false;
+                    break;
+                }
+            }
+
+
+            // TODO In Column
+            for (Square t : s.column) {
+                if (i == t.value) {
+                    re[i] = false;
+                    break;
+                }
+            }
+            // TODO In block
+            for (Square t : s.block) {
+                if (i == t.value) {
+                    re[i] = false;
+                    break;
+                }
+            }
+        }
+
+        return re;
     }
 
     /**
@@ -91,7 +199,42 @@ public class Sudoku {
         //                 return true
         //         nothing worked: set value back to 0 and return false
         // no squares left to fill in: return true
+
         return true;
     }
 
+    static void resetSquares(Square[][] grid) {
+        int i = 0, j = 0, index = 0;
+        // Add row, column, block info into each square
+        for (i = 0; i < 9; i++) {
+            for (j = 0; j < 9; j++) {
+                Location here = new Location();
+                here.row = i;
+                here.column = j;
+
+                // TODO Find row
+                Location[] row_locations = findRow(here);
+                Square[] row = new Square[8];
+                index = 0;
+                for (Location loc: row_locations) row[index++] = grid[loc.row][loc.column];
+                grid[i][j].row = row;
+
+                // TODO Find column
+                Location[] column_locations = findColumn(here);
+                Square[] column = new Square[8];
+                index = 0;
+                for (Location loc: column_locations) column[index++] = grid[loc.row][loc.column];
+                grid[i][j].column = column;
+
+                // TODO Find block
+                Location[] block_locations = findBlock(here);
+                Square[] block = new Square[8];
+                index = 0;
+                for (Location loc: block_locations) block[index++] = grid[loc.row][loc.column];
+                grid[i][j].block = block;
+            }
+        }
+
+
+    }
 }

@@ -1,5 +1,7 @@
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -137,6 +139,7 @@ class SudokuTest {
                             ".......9.\n";
         Square[][] grid = Sudoku.createSquares(diagram);
         Square s = grid[4][7];
+
         boolean[] correct = {false, false, true, false, false, false, true, false, false, false};
         assertArrayEquals(correct, Sudoku.findValidNumbers(s));
     }
