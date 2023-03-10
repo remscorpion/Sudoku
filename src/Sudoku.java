@@ -18,12 +18,17 @@ public class Sudoku {
      * ect with the specified row and column. */
     static Location createLocation(int r, int c) {
         // TODO You have to write this
-        return null;
+        Location temp = new Location();
+        temp.row = r;
+        temp.column = c;
+
+        return temp;
     }
 
     /** Returns an array of the eight Locations in the same row as here. */
     static Location[] findRow(Location here) {
         // TODO You have to write this
+
         return null;
     }
 
