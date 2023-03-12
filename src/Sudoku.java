@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -166,7 +167,6 @@ public class Sudoku {
                 }
             }
 
-
             // TODO In Column
             for (Square t : s.column) {
                 if (i == t.value) {
@@ -200,9 +200,34 @@ public class Sudoku {
         //         nothing worked: set value back to 0 and return false
         // no squares left to fill in: return true
 
+        for(int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                if (grid[i][j].value == 0) {
+                    boolean[] vail = findValidNumbers(grid[i][j]);
+                    for (int k = 1; k < vail.length; k++) {
+                        grid[i][j].value = k;
+                        resetSquares(grid);
+
+                        if (vail[k] && solve(grid)){
+                            return true;
+                        } else {
+                            grid[i][j].value = 0;
+                            resetSquares(grid);
+                        }
+                    }
+
+                    return false;
+                } // end if
+            } // end for j
+        } // end for i
+
         return true;
     }
 
+    /***
+     * set(reset) row column block of each Square in the board
+     * @param grid the board
+     */
     static void resetSquares(Square[][] grid) {
         int i = 0, j = 0, index = 0;
         // Add row, column, block info into each square
@@ -234,7 +259,7 @@ public class Sudoku {
                 grid[i][j].block = block;
             }
         }
-
-
     }
+
+
 }

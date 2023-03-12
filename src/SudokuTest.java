@@ -208,7 +208,9 @@ class SudokuTest {
                 "359186274\n" +
                 "764253189\n" +
                 "182749365\n";
+
         assertEquals(correct, Sudoku.toString(grid));
+
     }
 
     @Test
