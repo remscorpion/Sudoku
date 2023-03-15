@@ -68,12 +68,8 @@ public class Sudoku {
 
         for (int i = r; i < r + 3; i++) {
             for (int j = c; j < c + 3; j++) {
-                if (i == here.row && j == here.column) {
-                    continue;
-                } else {
-                    Location t = new Location();
-                    t.row = i;
-                    t.column = j;
+                if (!(i == here.row && j == here.column)) {
+                    Location t = createLocation(i, j);
                     temp[index++] = t;
                 }
             }
@@ -95,7 +91,31 @@ public class Sudoku {
                 grid[i][j] = n;
             }
         }
-        resetSquares(grid);
+
+        // TODO reset row column block
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                int index = 0;
+                Location here = createLocation(i, j);
+                Location[] rowL = findRow(here);
+                Square[] rowS = new Square[8];
+                for (Location loc : rowL) rowS[index++] = grid[loc.row][loc.column];
+                grid[i][j].row = rowS;
+
+                index = 0;
+                Location[] columnL = findColumn(here);
+                Square[] columS = new Square[8];
+                for (Location loc : columnL) columS[index++] = grid[loc.row][loc.column];
+                grid[i][j].column = columS;
+
+                index = 0;
+                Location[] blockL = findBlock(here);
+                Square[] blockS = new Square[8];
+                for (Location loc : blockL) blockS[index++] = grid[loc.row][loc.column];
+                grid[i][j].block = blockS;
+            }
+
+        }
         return grid;
     }
 
@@ -126,7 +146,7 @@ public class Sudoku {
      */
     static Square[][] createSquares(String diagram) {
         // TODO You have to write this
-        Square[][] grid = new Square[9][9];
+        Square[][] grid = createSquares();
         int i = 0, j = 0, index = 0;
         while (index < diagram.length()) {
             if (diagram.charAt(index) == '\n') {
@@ -144,7 +164,30 @@ public class Sudoku {
             index++;
         }
 
-        resetSquares(grid);
+        // TODO reset row column block
+        for (i = 0; i < 9; i++) {
+            for (j = 0; j < 9; j++) {
+                index = 0;
+                Location here = createLocation(i, j);
+                Location[] rowL = findRow(here);
+                Square[] rowS = new Square[8];
+                for (Location loc : rowL) rowS[index++] = grid[loc.row][loc.column];
+                grid[i][j].row = rowS;
+
+                index = 0;
+                Location[] columnL = findColumn(here);
+                Square[] columS = new Square[8];
+                for (Location loc : columnL) columS[index++] = grid[loc.row][loc.column];
+                grid[i][j].column = columS;
+
+                index = 0;
+                Location[] blockL = findBlock(here);
+                Square[] blockS = new Square[8];
+                for (Location loc : blockL) blockS[index++] = grid[loc.row][loc.column];
+                grid[i][j].block = blockS;
+            }
+        }
+
         return grid;
     }
 
@@ -202,18 +245,33 @@ public class Sudoku {
         for(int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 if (grid[i][j].value == 0) {
+                    // TODO reset row column block
+                    int index = 0;
+                    Location here = createLocation(i, j);
+                    Location[] rowL = findRow(here);
+                    Square[] rowS = new Square[8];
+                    for (Location loc : rowL) rowS[index++] = grid[loc.row][loc.column];
+
+                    index = 0;
+                    Location[] columnL = findColumn(here);
+                    Square[] columS = new Square[8];
+                    for (Location loc : columnL) columS[index++] = grid[loc.row][loc.column];
+
+                    index = 0;
+                    Location[] blockL = findBlock(here);
+                    Square[] blockS = new Square[8];
+                    for (Location loc : blockL) blockS[index++] = grid[loc.row][loc.column];
+
+                    // TODO try all vail numbers
                     boolean[] vail = findValidNumbers(grid[i][j]);
                     for (int k = 1; k < vail.length; k++) {
                         grid[i][j].value = k;
-                        resetSquares(grid);
-
                         if (vail[k] && solve(grid)){
                             return true;
                         } else {
                             grid[i][j].value = 0;
-                            resetSquares(grid);
                         }
-                    }
+                    } // end for k
 
                     return false;
                 } // end if
@@ -222,43 +280,5 @@ public class Sudoku {
 
         return true;
     }
-
-    /***
-     * set(reset) row column block of each Square in the board
-     * @param grid the board
-     */
-    static void resetSquares(Square[][] grid) {
-        int i = 0, j = 0, index = 0;
-        // Add row, column, block info into each square
-        for (i = 0; i < 9; i++) {
-            for (j = 0; j < 9; j++) {
-                Location here = new Location();
-                here.row = i;
-                here.column = j;
-
-                // TODO Find row
-                Location[] row_locations = findRow(here);
-                Square[] row = new Square[8];
-                index = 0;
-                for (Location loc: row_locations) row[index++] = grid[loc.row][loc.column];
-                grid[i][j].row = row;
-
-                // TODO Find column
-                Location[] column_locations = findColumn(here);
-                Square[] column = new Square[8];
-                index = 0;
-                for (Location loc: column_locations) column[index++] = grid[loc.row][loc.column];
-                grid[i][j].column = column;
-
-                // TODO Find block
-                Location[] block_locations = findBlock(here);
-                Square[] block = new Square[8];
-                index = 0;
-                for (Location loc: block_locations) block[index++] = grid[loc.row][loc.column];
-                grid[i][j].block = block;
-            }
-        }
-    }
-
 
 }
