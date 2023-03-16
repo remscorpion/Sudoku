@@ -164,6 +164,7 @@ public class Sudoku {
             index++;
         }
 
+
         // TODO reset row column block
         for (i = 0; i < 9; i++) {
             for (j = 0; j < 9; j++) {
@@ -245,23 +246,6 @@ public class Sudoku {
         for(int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 if (grid[i][j].value == 0) {
-                    // TODO reset row column block
-                    int index = 0;
-                    Location here = createLocation(i, j);
-                    Location[] rowL = findRow(here);
-                    Square[] rowS = new Square[8];
-                    for (Location loc : rowL) rowS[index++] = grid[loc.row][loc.column];
-
-                    index = 0;
-                    Location[] columnL = findColumn(here);
-                    Square[] columS = new Square[8];
-                    for (Location loc : columnL) columS[index++] = grid[loc.row][loc.column];
-
-                    index = 0;
-                    Location[] blockL = findBlock(here);
-                    Square[] blockS = new Square[8];
-                    for (Location loc : blockL) blockS[index++] = grid[loc.row][loc.column];
-
                     // TODO try all vail numbers
                     boolean[] vail = findValidNumbers(grid[i][j]);
                     for (int k = 1; k < vail.length; k++) {
