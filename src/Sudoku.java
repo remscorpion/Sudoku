@@ -3,8 +3,10 @@ import java.util.Arrays;
 /**
  * The Sudoku solver.
  *
- * @author PUT THE FIRST NAME HERE
+ * @author Tomohiro Matsunaga
  * @author PUT THE SECOND NAME HERE
+ *
+ * So far, Ed has compeleted methods: createLocation(int r, int c), findRow(), findColumn(), findBlock.
  */
 public class Sudoku {
 
