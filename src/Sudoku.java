@@ -35,10 +35,7 @@ public class Sudoku {
         Location[] temp = new Location[8];
         int i = 0;
         for (int j = 0; j < 9; j++) {
-            if (j != here.column) {
-                temp[i] = createLocation(here.row, j);
-                i++;
-            }
+            if (j != here.column) temp[i++] = createLocation(here.row, j);
         }
 
         return temp;
@@ -50,10 +47,8 @@ public class Sudoku {
         Location[] temp = new Location[8];
         int i = 0;
         for (int j = 0; j < 9; j++) {
-            if (j != here.row) {
-                temp[i] = createLocation(j, here.column);
-                i++;
-            }
+            if (j != here.row) temp[i++] = createLocation(j, here.column);
+
         }
 
         return temp;
@@ -266,5 +261,4 @@ public class Sudoku {
 
         return true;
     }
-
 }
